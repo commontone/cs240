@@ -1,6 +1,6 @@
 all: program2
 
-program2: program2.o BSTree.o
+program2: program2.o
 	g++ -std=c++11 -g program2.o -lm -o program2
 	
 program2.o: program2.cpp

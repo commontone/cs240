@@ -3,9 +3,10 @@
 
 class Player {
 	private:
+		
 	public:
 		Card hand;
-		Player(String, int);
+		Player(string, int);
 		string getName();
 		int getBudget();
 		bool bet(int);

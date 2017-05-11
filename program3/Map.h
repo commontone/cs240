@@ -15,9 +15,11 @@ class Map {
 		
 		~Map();
 	private:
+		unsigned int pathDistance2(City*,City*); //Internal, used for creating map
 		std::vector<City*> cities;
 		std::list<City*> adj;
 		City* nextTarget();
+		void pStatus();
 };
 
 #endif

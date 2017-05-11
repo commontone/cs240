@@ -17,7 +17,7 @@ class City {
 		bool operator<(City &c);
 		
 		bool explored; //Are this city's adjacents explored?
-		int dist; //Distance from original point
+		int dist; //Total distance from destination
 		City* op; //Optimal Previous City
 		
 		~City();

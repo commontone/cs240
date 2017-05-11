@@ -10,7 +10,7 @@
 #define TEST 0
 using namespace std;
 
-//Read in a file and structure a map
+//Read in a file and structure a maptemp
 Map::Map(string filename) {
 	//FILE READIING
 	std::fstream fptr; //Create a file pointer
@@ -27,7 +27,8 @@ Map::Map(string filename) {
 	}
 	fptr.close();
 	
-	//ADJACENCY LISTS
+	//ADJACENCY LIST
+	//List of cities
 	
 	//0,0 IS THE TOP LEFT/NORTHWEST OF THE GRAPH
 	for(auto i:cities) {
@@ -65,6 +66,8 @@ Map::Map(string filename) {
 				}
 			}
 		}
+		//PRINT STATEMENT. REMOVE LATER.
+		cout << i->getName() << " " << i->getXCoor() << " " << i->getYCoor() << " " << endl;
 		//Now add all the possible adjacencies. Null cities will be ignored.
 		i->addAdj(north);
 		i->addAdj(south);
@@ -72,6 +75,17 @@ Map::Map(string filename) {
 		i->addAdj(west);
 		
 	}
+	
+	cout << cities[0]->getAdjacent().front()->getName() << endl;
+	
+	/*
+	for(auto i:cities) {
+		cout << i->getName() << " " << i->getXCoor() << " " << i->getYCoor() << " " << endl;
+	}*/
+	//cout << (*it).getXCoor() << endl;
+	
+	
+	
 }
 
 Map::~Map() {
@@ -82,7 +96,9 @@ Map::~Map() {
 }
 
 vector<City*> Map::shortestPath(City* start, City* dest) {
+	cout << "Start dist before: " << start->dist << endl;pStatus();
 	vector<City*> ans;
+	cout << "HELLO 1" << endl;
 	int i = 0;
 	//Reset all necessary values
 	for(i = 0; i< cities.size(); i++) {
@@ -90,40 +106,57 @@ vector<City*> Map::shortestPath(City* start, City* dest) {
 		cities[i]->dist = -1;
 		cities[i]->op = NULL;
 	}
-	dest->dist = 0; //Make the start a distance of 0
-	dest->op = dest;
-	//Get the path distance to the end from each point
-	for(i = 0; i< cities.size(); i++) {
+	cout << "Start dist before: " << start->dist << endl;
+	start->dist = 0; //Make the start a distance of 0
+	start->op = start;
+	//Get the path distance to the start from each point
+	for(i = 0; i< cities.size(); i++) {cout << "HELLO 2" << endl;
 		City* now = nextTarget(); 
 		for(auto t:now->getAdjacent()) {
 			if(t->dist==-1) {
-				t->dist = pathDistance2(now,t);
+				t->dist = pathDistance(now,t);
 				t->op = now;
-				
+				cout << "OP from " << t->getName() << " is " << now->getName() << endl;pStatus();
 			} else { 
 				
-				if(pathDistance2(now,t) < t->dist) {
-					t->dist = pathDistance2(now,t); 
+				if(pathDistance(now,t) < t->dist) {
+					t->dist = pathDistance(now,t); 
 					t->op = now;
-				}
+				}pStatus();
 			}
 		}
 		now->explored = true;
+		cout << "Just Explored: " << now->getName() << endl;
 	}
 	
-
+	for(i = 0; i< cities.size(); i++) {
+		if(cities[i]->op!=NULL) {
+			cout << cities[i]->getName() << "\t" << cities[i]->dist << "\t" << cities[i]->op->getName() << endl;
+		} else {
+			cout << cities[i]->getName() << "\t" << cities[i]->dist << "\tNULL" << endl;
+		}
+		
+	}cout << "HELLO 4" << endl;
 	std::vector<City*>::iterator it;
 	it = ans.begin();
-	//Evaluate the path, starting from the start
-	if(start->dist != -1) {
-		City* cur = start;
-		ans.push_back(start);
-		while(cur!=dest) { //Until the destination is reached, keep going to the optimal previous.
-			cur = cur->op;
-			ans.push_back(cur);
-		}
+	//Evaluate the path, starting from the dest
+	City* cur = dest;
+	ans.push_back(dest);cout << "HELLO 5" << endl;
+	while(cur!=start) {
+		
+		cout << "Current: " << cur->getName() << endl;
+		cur = cur->op;
+		ans.push_back(cur);
 	}
 	
+	cout << "HELLO 9" << endl;
+	
+	for(auto t:ans) {
+		cout << t->getName();
+	}
+	cout << endl;
+	//It's in the wrong order, so reverse it?
+    std::reverse(std::begin(ans), std::end(ans));
 	return ans;
 }
 
@@ -155,9 +188,8 @@ City* Map::nextTarget() {
 	}
 	//Now find the lowest distance city
 	for(i = 0; i< cities.size(); i++) {
-		if(cities[i]->explored==false && cities[i]->dist!=-1) {
+		if(cities[i]->explored==false && cities[i]->dist!=-1 && cities[i]->dist < ret->dist) {
 			ret = cities[i];
-			//cout << "RET: " << cities[i]->getName() << endl;
 		}
 	}
 	
@@ -169,7 +201,7 @@ City* Map::nextTarget() {
 	return ret;
 }
 
-unsigned int Map::pathDistance2(City* start, City* dest) {
+unsigned int Map::pathDistance(City* start, City* dest) {
 	unsigned int ret = -1;
 	if(start->dist==-1) {
 		return ret;
@@ -178,18 +210,6 @@ unsigned int Map::pathDistance2(City* start, City* dest) {
 	ret = abs(start->getXCoor()-dest->getXCoor()) 
 			+ abs(start->getYCoor()-dest->getYCoor()) 
 			+ start->dist;
-	return ret;
-}
-
-unsigned int Map::pathDistance(City* start, City* dest) {
-	unsigned int ret = -1;
-	std::vector<City*> hi = shortestPath(start,dest);
-	if(hi.size()==0) {
-		ret = -1;
-		return ret;
-	} else {
-		return start->dist;
-	}
 	return ret;
 }
 

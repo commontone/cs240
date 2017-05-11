@@ -7,12 +7,12 @@
 using namespace std;
 
 City::City(std::string namea, int xa, int ya) {
-	name = namea;
-	x = xa;
-	y = ya;
-	explored = false;
-	dist = 0;
-	op = NULL;
+	name = namea; //City Name
+	x = xa; //X Position
+	y = ya; //Y Position
+	explored = false; //Adjacents have been explored
+	dist = 0; //Distance from destination
+	op = NULL; //Optimal Previous
 }
 
 std::string City::getName() {

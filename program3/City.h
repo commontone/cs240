@@ -1,8 +1,10 @@
 #ifndef CITY_H
 #define CITY_H
+
 #include <list>
 #include <cstdlib>
 #include <string>
+#include "Map.h"
 
 class City {
 	public:
@@ -10,12 +12,22 @@ class City {
 		std::string getName();
 		int getXCoor();
 		int getYCoor();
+		void addAdj(City*);
 		std::list<City*> getAdjacent();
 		bool operator<(City &c);
+		
+		bool explored; //Are this city's adjacents explored?
+		int dist; //Distance from original point
+		City* op; //Optimal Previous City
+		
+		~City();
 	private:
+		std::list<City*> adj;
 		std::string name;
 		int x;
 		int y;
+		
+		
 };
 
 #endif

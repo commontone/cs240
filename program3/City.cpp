@@ -10,10 +10,24 @@ City::City(std::string namea, int xa, int ya) {
 	name = namea;
 	x = xa;
 	y = ya;
+	explored = false;
 }
 
 std::string City::getName() {
 	return name;
+}
+
+City::~City() {
+}
+
+void City::addAdj(City* add) {
+	if(add!=NULL) {
+		adj.push_back(add);
+	}
+}
+
+list<City*> City::getAdjacent() {
+	return adj;
 }
 
 int City::getXCoor() {

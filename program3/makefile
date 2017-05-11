@@ -23,3 +23,6 @@ checkmem: maptest
 
 clean:
 	rm *.o maptest.out
+
+git: Map.h Map.cpp City.cpp City.h
+	git add Map.h Map.cpp City.cpp City.h makefile

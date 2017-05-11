@@ -95,11 +95,56 @@ Map::~Map() {
 }
 
 vector<City*> Map::shortestPath(City* start, City* dest) {
+	vector<City*> ans;
+	ans.push_back(start);
+	int i = 0;
+	//Reset all necessary values
+	for(i = 0; i< cities.size(); i++) {
+		cities[i]->explored = false;
+		cities[i]->dist = -1;
+		cities[i]->op = NULL;
+	}
+	start->dist = 0; //Make the start a distance of 0
+	//Get the path distance to the start from each point
+	for(i = 0; i< cities.size(); i++) {
+		City* now = nextTarget();
+		for(auto t:now->getAdjacent()) {
+			if(t->dist==-1) {
+				t->dist = pathDistance(now,t);
+				t->op = now;
+			}
+		}
+		now->explored = true;
+	}
 	
+	return ans;
+}
+
+City* Map::nextTarget() {
+	City* ret = NULL;
+	int i = 0;
+	//Find the first unexplored city
+	for(i = 0; i< cities.size(); i++) {
+		if(cities[i]->explored==false) {
+			ret = cities[i];
+			break;
+		}
+	}
+	//Now find the lowest distance city
+	for(i = 0; i< cities.size(); i++) {
+		if(cities[i]->explored==false && cities[i]->dist!=-1 && cities[i]->dist < ret->dist) {
+			ret = cities[i];
+		}
+	}
+	return ret;
 }
 
 unsigned int Map::pathDistance(City* start, City* dest) {
-	return 0;
+	unsigned int ret = 0;
+	ret = abs(start->getXCoor()-dest->getXCoor()) 
+			+ abs(start->getYCoor()-dest->getYCoor()) 
+			+ start->dist;
+	return ret;
 }
 
 //Return a City pointer corresponding to a given city name
@@ -118,7 +163,7 @@ int main(int argc, char *argv[]) {
 	cout << "Hello" << endl;
 	Map map("townlist2.txt");
 	City* how = map.findByName("asgard");
-	cout << how->getYCoor() << endl;
+	cout << map.pathDistance(map.findByName("doomstadt"), map.findByName("kun-lun")) << endl;
 	return 0;
 }
 #endif

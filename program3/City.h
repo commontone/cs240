@@ -12,7 +12,7 @@ class City {
 		std::string getName();
 		int getXCoor();
 		int getYCoor();
-		void addAdj(City*);
+		void addAdj(City*); 
 		std::list<City*> getAdjacent();
 		bool operator<(City &c);
 		
@@ -21,6 +21,7 @@ class City {
 		City* op; //Optimal Previous City
 		
 		~City();
+		
 	private:
 		std::list<City*> adj;
 		std::string name;

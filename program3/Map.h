@@ -12,10 +12,12 @@ class Map {
 		City* findByName(std::string);
 		std::vector<City*> shortestPath(City*, City*);
 		unsigned int pathDistance(City*,City*);
+		
 		~Map();
 	private:
 		std::vector<City*> cities;
 		std::list<City*> adj;
+		City* nextTarget();
 };
 
 #endif

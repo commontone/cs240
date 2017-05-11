@@ -11,6 +11,8 @@ City::City(std::string namea, int xa, int ya) {
 	x = xa;
 	y = ya;
 	explored = false;
+	dist = 0;
+	op = NULL;
 }
 
 std::string City::getName() {
